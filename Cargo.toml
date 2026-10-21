@@ -1,0 +1,30 @@
+[package]
+name = "clippy"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Only the eframe parts Clippy uses: Metal drawing (wgpu), copy and paste in the search box,
+# system fonts, and VoiceOver support. Its built-in fonts are left out; Clippy uses SF Pro.
+eframe = { version = "0.37.0", default-features = false, features = ["accesskit", "clipboard", "system_fonts", "wgpu"] }
+global-hotkey = "0.9.0"
+objc2 = "0.6.5"
+objc2-app-kit = { version = "0.3.2", default-features = false, features = ["std", "NSApplication", "NSResponder", "NSPasteboard", "NSWorkspace", "NSRunningApplication", "NSImage", "NSImageRep", "NSBitmapImageRep", "NSGraphicsContext", "NSGraphics", "NSFontDescriptor", "objc2-core-foundation"] }
+objc2-foundation = { version = "0.3.2", default-features = false, features = ["std", "NSString", "NSArray", "NSURL", "NSFileManager", "NSGeometry", "NSData", "NSDictionary"] }
+# Uses the SQLite that comes with macOS, which also receives its security updates.
+rusqlite = "0.40.2"
+tray-icon = "0.26.1"
+winit = "0.30.13"
+
+# Settings for a small app rather than the fastest code; Clippy does little work.
+[profile.release]
+strip = true
+lto = true
+opt-level = "z"
+codegen-units = 1
+panic = "abort"
+
+[dev-dependencies]
+egui_kittest = { version = "0.37.0", features = ["wgpu", "snapshot"] }
+egui_system_font_provider = "0.37.0"
+image = { version = "0.25", default-features = false, features = ["png"] }
